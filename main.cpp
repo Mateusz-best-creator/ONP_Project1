@@ -9,6 +9,8 @@ int wage(char ch)
         return 1;
     else if (ch == '*' || ch == '/')
         return 2;
+    else if (ch == 'N')
+        return 3;
     return 0;
 }
 
@@ -16,7 +18,7 @@ void operator_char(char Stack[S_MAX], int& index, char character, std::string& o
 {
     while (index > 0)
     {
-        if (wage(character) >= wage(Stack[index - 1]))
+        if (wage(character) == 3 || wage(character) > wage(Stack[index - 1]))
             break;
         output += Stack[--index];
         output += ' ';
@@ -65,8 +67,9 @@ int main()
         case '-':
         case '*':
         case '/':
+        case 'N':
             operator_char(Stack, stack_index, character, output);
-            break;
+            break;  
         default:
             output += character;
             output += ' ';

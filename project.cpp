@@ -29,7 +29,8 @@ void operator_char(std::vector<std::string>& Stack, int& index, char character, 
 
 int main()
 {
-    std::string expression = "MIN ( 100 , MAX ( 1 , 34 * 2 + 10 - 20 , 2 ) , 80 , 60 )";
+    //std::string expression = "MIN ( 100 , MAX ( 1 , 34 * 2 + 10 - 20 , 2 ) , 80 , 60 )";
+    std::string expression = "400 + ( 11 - ( 3 * 2 ) ) / 2 + 200";
     std::vector<std::string> stack;
     int index = 0;
     std::string temp = "";
@@ -46,7 +47,7 @@ int main()
                 index--;
                 stack.pop_back(); // remove '(' symbol
             }
-            if (stack[index - 1] == "MIN" || stack[index - 1] == "MAX")
+            if (stack[index - 1] == "MIN" || stack[index - 1] == "MAX" || stack[index - 1] == "N")
             {
                 output.push_back(stack[--index]);
                 stack.pop_back();
@@ -67,11 +68,6 @@ int main()
                     index++;
                 }
                 temp.clear();
-            }
-            if (c != ' ')
-            {
-                stack.push_back(std::string(1, c));
-                index++;
             }
         }
         else if (c == '+' || c == '-' || c == '*' || c == '/' || c == ',')
