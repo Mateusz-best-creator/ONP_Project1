@@ -57,6 +57,10 @@ int main()
             Stack[stack_index++] = character;
             break;
         case ')':
+            std::cout << "Stack here: \n";
+            for (int i = 0; i < stack_index; i++)
+                std::cout << Stack[i] << " ";
+            std::cout << std::endl;
             while (stack_index > 0 && Stack[stack_index - 1] != '(')
             {
                 output += Stack[--stack_index];
@@ -64,6 +68,15 @@ int main()
             }
             if (stack_index > 0) 
                 stack_index--; // Remove '(' from the stack
+            std::cout << "Stack there: \n";
+            for (int i = 0; i < stack_index; i++)
+                std::cout << Stack[i] << " ";
+            std::cout << std::endl;
+            if (Stack[stack_index - 1] == 'I' || Stack[stack_index - 1] == 'M' || Stack[stack_index - 1] == 'A')
+            {
+                output += Stack[--stack_index];
+                output += ' ';
+            }
             break;
         case '+':
         case '-':
