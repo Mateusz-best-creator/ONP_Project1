@@ -9,7 +9,7 @@ int wage(char ch)
         return 1;
     else if (ch == '*' || ch == '/')
         return 2;
-    else if (ch == 'N')
+    else if (ch == 'N' || ch == 'I' || ch == 'M' || ch == 'A') // I stand for "if" for now, "M" stands for min and 'A' stands for max
         return 3;
     return 0;
 }
@@ -36,6 +36,8 @@ int main()
     while (true)
     {
         std::cin >> character;
+        if (character == ',')
+            continue;
 
         if (character == '.')
         {
@@ -68,6 +70,9 @@ int main()
         case '*':
         case '/':
         case 'N':
+        case 'I':
+        case 'M': // MIN
+        case 'A': // MAX
             operator_char(Stack, stack_index, character, output);
             break;  
         default:
