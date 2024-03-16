@@ -3,12 +3,13 @@
 #include <algorithm>
 #include <deque>
 #include <vector>
+#include <cctype>
 
 void removeDoubleWhitespaces(std::string& str) 
 {
     for (size_t i = 0; i < str.size() - 1; ++i) 
     {
-        if (std::isspace(str[i]) && std::isspace(str[i + 1])) 
+        if (isspace(str[i]) && isspace(str[i + 1])) 
         {
             // Erase the next whitespace
             str.erase(i + 1, 1);
@@ -29,7 +30,7 @@ void replaceSingleWhitespacesWithDouble(std::string& str)
 
 const int S_MAX = 100;
 
-int wage(std::string ch) 
+int wage(const std::string& ch) 
 {
     if (ch == "+" || ch == "-")
         return 1;
@@ -66,7 +67,8 @@ int main()
         std::string output;
         int local_counter_stack[S_MAX];
         int local_stack_index = 0;
-        bool first = true;
+        bool first_bool = true;
+        bool division_by_zero = false;
 
         std::string expression;
         std::getline(std::cin, expression);
@@ -91,7 +93,7 @@ int main()
         {
             if (string == ",") {
                 while (stack_index > 0 && (Stack[stack_index - 1] == "+" || Stack[stack_index - 1] == "-" 
-                || Stack[stack_index - 1] == "/" || Stack[stack_index - 1] == "*")) 
+                || Stack[stack_index - 1] == "/" || Stack[stack_index - 1] == "*" || Stack[stack_index - 1] == "N")) 
                 {
                     stack_index--;
                     output += Stack[stack_index];
@@ -113,8 +115,8 @@ int main()
 
             if (string == "(") {
                 Stack[stack_index++] = string;
-                if (first)
-                    first = false;
+                if (first_bool)
+                    first_bool = false;
                 else
                     local_stack_index++;
                 local_counter_stack[local_stack_index] = 1;
@@ -174,6 +176,8 @@ int main()
         
         for (auto word : separated_expression)
         {
+            if (division_by_zero)
+                break;
             if (word[0] == 'M' && word[1] == 'A')
             {
                 int amount = (word[word.size() - 1]) - '0';
@@ -272,9 +276,10 @@ int main()
                     if (num2 == 0)
                     {
                         std::cout << "ERROR\n";
-                        return 0;
+                        division_by_zero = true;
                     }
-                    result = std::to_string(num1 / num2);
+                    else
+                        result = std::to_string(num1 / num2);
                 }
                 else if (word == "+")
                     result = std::to_string(num1 + num2);
@@ -287,6 +292,12 @@ int main()
                 queue.push_back(word);
             }
         }
-        std::cout << queue.back() << "\n\n";
+        if (division_by_zero)
+        {
+            std::cout << "\n\n";
+            division_by_zero = false;
+        }
+        else
+            std::cout << queue.back() << "\n\n";
     }
 }
