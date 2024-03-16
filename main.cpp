@@ -1,32 +1,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <deque>
 #include <vector>
-#include <cctype>
-
-void removeDoubleWhitespaces(std::string& str) 
-{
-    for (size_t i = 0; i < str.size() - 1; ++i) 
-    {
-        if (isspace(str[i]) && isspace(str[i + 1])) 
-        {
-            // Erase the next whitespace
-            str.erase(i + 1, 1);
-            --i;
-        }
-    }
-}
-
-void replaceSingleWhitespacesWithDouble(std::string& str) 
-{
-    size_t pos = 0;
-    while ((pos = str.find(' ', pos)) != std::string::npos) 
-    {
-        str.replace(pos, 1, "  ");
-        pos += 2;
-    }
-}
 
 const int S_MAX = 100;
 
@@ -41,11 +16,14 @@ int wage(const std::string& ch)
     return 0;
 }
 
-void operator_char(std::string Stack[S_MAX], int& index, std::string& character, std::string& output) {
+void operator_char(std::string Stack[S_MAX], int& index, std::string& character, std::string& output, std::vector<std::string>& helper) 
+{
     while (index > 0) {
         if (wage(character) == 3 || wage(character) > wage(Stack[index - 1]))
             break;
         output += Stack[--index];
+        if (Stack[index].size())
+            helper.push_back(Stack[index]);
         output += ' ';
     }
     if (index < S_MAX) // Check if index is within bounds before accessing the array
@@ -73,6 +51,7 @@ int main()
         std::string expression;
         std::getline(std::cin, expression);
         std::vector<std::string> separated_expression;
+        std::vector<std::string> separated_expression_for_processing;
         
         std::string temp;
         for (char c : expression) 
@@ -97,6 +76,8 @@ int main()
                 {
                     stack_index--;
                     output += Stack[stack_index];
+                    if (Stack[stack_index].size())
+                        separated_expression_for_processing.push_back(Stack[stack_index]);
                     output += ' ';
                 }
                 local_counter_stack[local_stack_index]++;
@@ -108,6 +89,8 @@ int main()
                 while (stack_index > 0) 
                 {
                     output += Stack[--stack_index];
+                    if (Stack[stack_index].size())
+                        separated_expression_for_processing.push_back(Stack[stack_index]);
                     output += ' ';
                 }
                 break;
@@ -126,6 +109,8 @@ int main()
                 while (stack_index > 0 && Stack[stack_index - 1] != "(") 
                 {
                     output += Stack[--stack_index];
+                    if (Stack[stack_index].size())
+                        separated_expression_for_processing.push_back(Stack[stack_index]);
                     output += ' ';
                 }
 
@@ -134,9 +119,16 @@ int main()
 
                 if (stack_index > 0 && (Stack[stack_index - 1] == "IF" || Stack[stack_index - 1] == "MIN" || Stack[stack_index - 1] == "MAX")) 
                 {
+                    std::string full;
                     output += Stack[stack_index - 1];
+                    full += Stack[stack_index - 1];
                     if (stack_index > 0 && Stack[stack_index - 1] != "IF")
+                    {
                         output += '0' + local_counter_stack[local_stack_index];
+                        full += '0' + local_counter_stack[local_stack_index];
+                    }
+                    if (full.size())
+                        separated_expression_for_processing.push_back(full);
                     stack_index--;
                     output += ' ';
                 }
@@ -146,35 +138,22 @@ int main()
             }
 
             else if (string == "+" || string == "-" || string == "/" || string == "*" || string == "MIN" || string == "MAX" || string == "IF" || string == "N") 
-                operator_char(Stack, stack_index, string, output);
+                operator_char(Stack, stack_index, string, output, separated_expression_for_processing);
             else 
             {
                 output += string;
+                if (string.size())
+                    separated_expression_for_processing.push_back(string);
                 output += ' ';
             }
         }
-        removeDoubleWhitespaces(output);
-        temp.clear();
-        separated_expression.clear();
-        for (char c : output)
-        {
-            if (c == ' ')
-            {
-                separated_expression.push_back(temp);
-                temp.clear();
-            }
-            else
-            {
-                temp += c;
-            }
-        }
-        replaceSingleWhitespacesWithDouble(output);
+
         std::cout << output << std::endl;
-        
+
         // Now when basic preprocessing is done we begin!
-        std::deque<std::string> queue;
+        std::vector<std::string> queue;
         
-        for (auto word : separated_expression)
+        for (auto word : separated_expression_for_processing)
         {
             if (division_by_zero)
                 break;
