@@ -32,12 +32,18 @@ int main()
     int stack_index = 0;
     std::string output;
     char character;
+    int local_counter_stack[S_MAX];
+    int local_stack_index = 0;
+    bool first = true;
 
     while (true)
     {
         std::cin >> character;
         if (character == ',')
+        {
+            local_counter_stack[local_stack_index]++;
             continue;
+        }
 
         if (character == '.')
         {
@@ -46,6 +52,7 @@ int main()
                 output += Stack[--stack_index];
                 output += ' ';
             }
+            output += local_stack_index[local_counter_stack];
             break;
         }
 
@@ -55,12 +62,23 @@ int main()
             break;
         case '(':
             Stack[stack_index++] = character;
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                local_stack_index++;
+            }
+            local_counter_stack[local_stack_index] = 1;
             break;
         case ')':
+        
             std::cout << "Stack here: \n";
-            for (int i = 0; i < stack_index; i++)
-                std::cout << Stack[i] << " ";
+            for (int i = 0; i < local_stack_index; i++)
+                std::cout << local_counter_stack[i] << " ";
             std::cout << std::endl;
+
             while (stack_index > 0 && Stack[stack_index - 1] != '(')
             {
                 output += Stack[--stack_index];
@@ -68,15 +86,22 @@ int main()
             }
             if (stack_index > 0) 
                 stack_index--; // Remove '(' from the stack
-            std::cout << "Stack there: \n";
-            for (int i = 0; i < stack_index; i++)
-                std::cout << Stack[i] << " ";
-            std::cout << std::endl;
+
             if (Stack[stack_index - 1] == 'I' || Stack[stack_index - 1] == 'M' || Stack[stack_index - 1] == 'A')
             {
                 output += Stack[--stack_index];
+                output += '0' + local_counter_stack[local_stack_index];
                 output += ' ';
             }
+            local_counter_stack[local_stack_index] = 0;
+            if (local_stack_index > 0)
+                local_stack_index--;
+
+            std::cout << "Stack there: \n";
+            for (int i = 0; i < local_stack_index; i++)
+                std::cout << local_counter_stack[i] << " ";
+            std::cout << std::endl;
+
             break;
         case '+':
         case '-':
