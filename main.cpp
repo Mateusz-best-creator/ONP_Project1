@@ -41,6 +41,12 @@ int main()
         std::cin >> character;
         if (character == ',')
         {
+            while (stack_index > 0 && (Stack[stack_index - 1] == '+' || Stack[stack_index] == '-' || Stack[stack_index - 1] == '/' || Stack[stack_index] == '*'))
+            {
+                stack_index--;
+                output += Stack[stack_index];
+                output += ' ';
+            }
             local_counter_stack[local_stack_index]++;
             continue;
         }
@@ -73,11 +79,12 @@ int main()
             local_counter_stack[local_stack_index] = 1;
             break;
         case ')':
-        
+            /*
             std::cout << "Stack here: \n";
             for (int i = 0; i < local_stack_index; i++)
                 std::cout << local_counter_stack[i] << " ";
             std::cout << std::endl;
+            */
 
             while (stack_index > 0 && Stack[stack_index - 1] != '(')
             {
@@ -90,18 +97,19 @@ int main()
             if (Stack[stack_index - 1] == 'I' || Stack[stack_index - 1] == 'M' || Stack[stack_index - 1] == 'A')
             {
                 output += Stack[--stack_index];
-                output += '0' + local_counter_stack[local_stack_index];
+                if (Stack[stack_index - 1] != 'I')
+                    output += '0' + local_counter_stack[local_stack_index];
                 output += ' ';
             }
             local_counter_stack[local_stack_index] = 0;
             if (local_stack_index > 0)
                 local_stack_index--;
-
+            /*
             std::cout << "Stack there: \n";
             for (int i = 0; i < local_stack_index; i++)
                 std::cout << local_counter_stack[i] << " ";
             std::cout << std::endl;
-
+            */
             break;
         case '+':
         case '-':
