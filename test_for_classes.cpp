@@ -1,6 +1,6 @@
 #include "string.h"
 #include "vector.h"
-#include <string>
+#include <iostream>
 
 using std::cout;
 using std::cin;
@@ -8,7 +8,7 @@ using std::endl;
 
 int main()
 {
-    Vector<std::string> vector;
+    Vector<String> vector;
     vector.push_back("Mateusz ");
     vector.push_back("C++ ");
     vector.push_back("Vector ");
@@ -16,4 +16,10 @@ int main()
     vector.pop_back();
     cout << vector << endl;
     cout << vector.back() << endl;
+
+    String name;
+    cin >> name;
+    cout << name << std::endl;
+    name += " I jeszcze Mikolaj";
+    cout << name << std::endl;
 }

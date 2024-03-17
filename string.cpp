@@ -1,70 +1,133 @@
+#include <iostream>
+#include <cstring>
 #include "string.h"
+
+using std::strlen;
+using std::strcpy;
+using std::strcmp;
+using std::strcat;
 
 String::String()
 {
-    ReAlloc(1);
+    length = 0;
+    str = new char[1];
+    str[0] = '\0';
 }
 
-String::String(const char* buffer) 
+String::String(const char* s)
 {
-    m_Size = strlen(buffer);
-    m_Capacity = 2 * m_Size;
-
-    m_Data = new char[m_Capacity];
-    for (size_t i = 0; i < m_Size; i++)
-        m_Data[i] = buffer[i];
-
-    m_Data[m_Size] = '\0'; // Null-terminate the string
+    if (s == nullptr)
+    {
+        length = 0;
+        str = new char[1];
+        str[0] = '\0';
+    }
+    else
+    {
+        length = strlen(s);
+        str = new char[length + 1];
+        strcpy(str, s);
+    }
 }
 
-String::String(const String& other)
+String::String(const String& s)
 {
-    m_Size = other.m_Size;
-    m_Capacity = other.m_Capacity;
-
-    m_Data = new char[m_Size];
-    for (size_t i = 0; i < m_Size; i++)
-            m_Data[i] = other.m_Data[i];
-
-    m_Data[m_Size] = '\0'; // Null-terminate the string
-}
-
-String::String(String&& other)
-{
-    m_Size = other.m_Size;
-    m_Capacity = other.m_Capacity;
-    m_Data = other.m_Data;
-
-    other.m_Data = nullptr;
-    other.m_Size = other.m_Capacity = 0;
+    length = strlen(s.str);
+    str = new char[length + 1];
+    strcpy(str, s.str);
 }
 
 String::~String()
 {
-    delete[] m_Data;
+    delete[] str;
 }
 
-String& String::operator+(const String& other)
+// Define overloaded operators
+bool String::operator<(const String& s) const
 {
-    m_Size += other.m_Size;
-    if (m_Size >= m_Capacity)
-    {
-        ReAlloc(m_Capacity * 2);
-    }
+    return strcmp(this->str, s.str) < 0;
 }
 
-void String::ReAlloc(size_t newCapacity)
+bool String::operator>(const String& s) const
 {
-    char* newBlock = new char[newCapacity];
+    return s.str < this->str;
+}
 
-    if (newCapacity < m_Size)
-        m_Size = newCapacity;
+bool String::operator==(const String& s) const
+{
+    return strcmp(s.str, this->str) == 0;
+}
 
-    for (size_t i = 0; i < m_Size; i++)
-        newBlock[i] = m_Data[i];
+String String::operator+(const String& s) const
+{
+    size_t size1 = strlen(this->str), size2 = strlen(s.str);
+    char* buffer = new char[size1 + size2 + 1];
+    strcpy(buffer, this->str);
+    strcat(buffer, s.str);
+    String new_string { buffer };
+    delete[] buffer;
+    return new_string;
+}
 
-    delete[] m_Data;
-    m_Data = newBlock;
-    m_Data[m_Size] = '\0';
-    m_Capacity = newCapacity;
+void String::operator+=(const String& s)
+{
+    size_t size1 = strlen(this->str), size2 = strlen(s.str);
+    char* buffer = new char[size1 + size2 + 1];
+    strcpy(buffer, this->str);
+    strcat(buffer, s.str);
+    delete[] this->str;
+    this->str = new char[size1 + size2 + 1];
+    strcpy(this->str, buffer);
+    this->length = strlen(this->str);
+    delete[] buffer;
+}
+
+String& String::operator=(const String& s)
+{
+    // Check for self assignment
+    if (this == &s)
+        return *this;
+    delete[] this->str;
+    this->length = strlen(s.str);
+    this->str = new char[this->length + 1];
+    strcpy(this->str, s.str);
+    return *this;
+}
+
+String& String::operator=(const char* s)
+{
+    delete[] this->str;
+    this->length = strlen(s);
+    this->str = new char[length + 1];
+    strcpy(this->str, s);
+    return *this;
+}
+
+char& String::operator[](int index)
+{
+    return this->str[index];
+}
+
+const char& String::operator[](int index) const
+{
+    return this->str[index];
+}
+
+// Friend functions
+std::ostream& operator<<(std::ostream& os, const String& s)
+{
+    os << s.str;
+    return os;
+}
+
+std::istream& operator>>(std::istream& is, String& s)
+{
+    char temp[CIN_LIM];
+    is.getline(temp, CIN_LIM);
+    for (int i = 0; i < CIN_LIM; i++)
+        s.str[i] = temp[i];
+
+    while (is && is.get() != '\n')
+        continue;
+    return is;
 }
