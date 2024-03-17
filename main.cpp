@@ -1,22 +1,23 @@
 #include <iostream>
-#include <string>
 #include <algorithm>
+
+#include "string.h"
 #include "vector.h"
 
 const int S_MAX = 10000;
 
-int wage(const std::string& ch) 
+int wage(const String& ch) 
 {
-    if (ch == "+" || ch == "-")
+    if (ch[0] == '+' || ch[0] == '-')
         return 1;
-    else if (ch == "*" || ch == "/")
+    else if (ch[0] == '*' || ch[0] == '/')
         return 2;
-    else if (ch == "N" || ch == "IF" || ch == "MIN" || ch == "MAX")
+    else if (ch[0] == 'N' || (ch[0] == 'I' && ch[1] == 'F') || (ch[0] == 'M' && ch[1] == 'I') || (ch[0] == 'M' && ch[1] == 'A'))
         return 3;
     return 0;
 }
 
-void operator_char(std::string Stack[S_MAX], int& index, std::string& character, std::string& output, Vector<std::string>& helper) 
+void operator_char(String Stack[S_MAX], int& index, String& character, String& output, Vector<String>& helper) 
 {
     while (index > 0) {
         if (wage(character) == 3 || wage(character) > wage(Stack[index - 1]))
@@ -34,7 +35,7 @@ int main()
 {
     int times;
     std::cin >> times;
-    std::string Stack[S_MAX];
+    String Stack[S_MAX];
     while (std::cin.get() != '\n')
         continue;
 
@@ -42,20 +43,21 @@ int main()
     {
 
         int stack_index = 0;
-        std::string output;
+        String output;
         int local_counter_stack[S_MAX];
         int local_stack_index = 0;
         bool first_bool = true;
         bool division_by_zero = false;
 
-        std::string expression;
-        std::getline(std::cin, expression);
-        Vector<std::string> separated_expression;
-        Vector<std::string> separated_expression_for_processing;
+        String expression;
+        std::cin >> expression;
+        Vector<String> separated_expression;
+        Vector<String> separated_expression_for_processing;
         
-        std::string temp;
-        for (char c : expression) 
+        String temp;
+        for (int i = 0; i < expression.size(); i++)
         {
+            char c = expression[i];
             if (c != ' ')
                 temp += c;
             else 
@@ -64,15 +66,15 @@ int main()
                 temp.clear();
             }
         }
-        if (temp != " ")
+        if (temp[0] != ' ')
             separated_expression.push_back(temp);
 
         for (int i = 0; i < separated_expression.size(); i++)
         {
-            std::string string = separated_expression[i];
-            if (string == ",") {
-                while (stack_index > 0 && (Stack[stack_index - 1] == "+" || Stack[stack_index - 1] == "-" 
-                || Stack[stack_index - 1] == "/" || Stack[stack_index - 1] == "*" || Stack[stack_index - 1] == "N")) 
+            String string = separated_expression[i];
+            if (string[0] == ',') {
+                while (stack_index > 0 && (Stack[stack_index - 1][0] == '+' || Stack[stack_index - 1][0] == '-' 
+                || Stack[stack_index - 1][0] == '/' || Stack[stack_index - 1][0] == '*' || Stack[stack_index - 1][0] == 'N')) 
                 {
                     stack_index--;
                     output += Stack[stack_index];
@@ -84,7 +86,7 @@ int main()
                 continue;
             }
 
-            if (string == ".") 
+            if (string[0] == '.') 
             {
                 while (stack_index > 0) 
                 {
@@ -96,7 +98,7 @@ int main()
                 break;
             }
 
-            if (string == "(") {
+            if (string[0] == '(') {
                 Stack[stack_index++] = string;
                 if (first_bool)
                     first_bool = false;
@@ -104,9 +106,9 @@ int main()
                     local_stack_index++;
                 local_counter_stack[local_stack_index] = 1;
             }
-            else if (string == ")") 
+            else if (string[0] == ')') 
             {
-                while (stack_index > 0 && Stack[stack_index - 1] != "(") 
+                while (stack_index > 0 && Stack[stack_index - 1][0] != '(') 
                 {
                     output += Stack[--stack_index];
                     if (Stack[stack_index].size())
@@ -117,12 +119,15 @@ int main()
                 if (stack_index > 0) 
                     stack_index--; // Remove '(' from the stack
 
-                if (stack_index > 0 && (Stack[stack_index - 1] == "IF" || Stack[stack_index - 1] == "MIN" || Stack[stack_index - 1] == "MAX")) 
+                if (stack_index > 0 && ((string[0] == 'I' && string[1] == 'F') || 
+                (string[0] == 'M' && string[1] == 'I') 
+                || (string[0] == 'M' && string[1] == 'A')))
+
                 {
-                    std::string full;
+                    String full;
                     output += Stack[stack_index - 1];
                     full += Stack[stack_index - 1];
-                    if (stack_index > 0 && Stack[stack_index - 1] != "IF")
+                    if (stack_index > 0 && Stack[stack_index - 1][0] != 'I' && Stack[stack_index - 1][1] != 'F')
                     {
                         output += std::to_string(local_counter_stack[local_stack_index]);
                         full += std::to_string(local_counter_stack[local_stack_index]);
@@ -137,7 +142,9 @@ int main()
                     local_stack_index--;
             }
 
-            else if (string == "+" || string == "-" || string == "/" || string == "*" || string == "MIN" || string == "MAX" || string == "IF" || string == "N") 
+            else if (string[0] == '+' || string[0] == '-' || string[0] == '/' || string[0] == '*' 
+            || (string[0] == 'M' && string[1] == 'I') || (string[0] == 'M' && string[1] == 'A') 
+            || (string[0] == 'I' && string[1] == 'F') || string[0] == 'N') 
                 operator_char(Stack, stack_index, string, output, separated_expression_for_processing);
             else 
             {
@@ -151,11 +158,11 @@ int main()
         std::cout << output << std::endl;
 
         // Now when basic preprocessing is done we begin!
-        Vector<std::string> queue;
+        Vector<String> queue;
         
         for (int i = 0; i < separated_expression_for_processing.size(); i++)
         {
-            std::string word = separated_expression_for_processing[i];
+            String word = separated_expression_for_processing[i];
             if (division_by_zero)
                 break;
             if (word[0] == 'M' && word[1] == 'A')
@@ -165,7 +172,7 @@ int main()
                 int maxValue = -9999;
                 for (int i = 0; i < amount; i++)
                 {
-                    int number = std::stoi(queue.back());
+                    int number = std::stoi(queue.back().get_data());
                     queue.pop_back();
                     maxValue = std::max(maxValue, number);
                     std::cout << number << " ";
@@ -184,7 +191,7 @@ int main()
                 int minValue = 9999;
                 for (int i = 0; i < amount; i++)
                 {
-                    int number = std::stoi(queue.back());
+                    int number = std::stoi(queue.back().get_data());
                     queue.pop_back();
                     minValue = std::min(minValue, number);
                     std::cout << number << " ";
@@ -196,9 +203,9 @@ int main()
                 std::cout << std::endl;
                 queue.push_back(std::to_string(minValue));
             }
-            else if (word == "N")
+            else if (word[0] == 'N')
             {
-                int num1 = std::stoi(queue.back());
+                int num1 = std::stoi(queue.back().get_data());
                 queue.pop_back();
                 std::cout << word << " " << num1 << " ";
                 for (int i = queue.size() - 1; i >= 0; i--)
@@ -207,19 +214,19 @@ int main()
                 }
                 std::cout << std::endl;
                 num1 *= -1;
-                std::string result = std::to_string(num1);
+                String result = std::to_string(num1);
                 queue.push_back(result);
             }
-            else if (word == "IF")
+            else if (word[0] == 'I' && word[1] == 'F')
             {
                 std::cout << word << " ";
-                int third = std::stoi(queue.back());
+                int third = std::stoi(queue.back().get_data());
                 queue.pop_back();
-                int second = std::stoi(queue.back());
+                int second = std::stoi(queue.back().get_data());
                 queue.pop_back();
-                int first = std::stoi(queue.back());
+                int first = std::stoi(queue.back().get_data());
                 queue.pop_back();
-                std::string result;
+                String result;
                 if (first > 0)
                     result = std::to_string(second);
                 else
@@ -232,11 +239,11 @@ int main()
                 std::cout << std::endl;
                 queue.push_back(result);
             }
-            else if (word == "*" || word == "/" || word == "+" || word == "-")
+            else if (word[0] == '*' || word[0] == '/' || word[0] == '+' || word[0] == '-')
             {
-                std::string second = queue.back();
+                String second = queue.back();
                 queue.pop_back();
-                std::string first = queue.back();
+                String first = queue.back();
                 queue.pop_back();
                 std::cout << word << " " << second << " " << first << " ";
 
@@ -245,13 +252,13 @@ int main()
                     std::cout << queue[i] << " ";
                 }
                 std::cout << std::endl;
-                int num1 = std::stoi(first);
-                int num2 = std::stoi(second);
+                int num1 = std::stoi(first.get_data());
+                int num2 = std::stoi(second.get_data());
                 
-                std::string result;
-                if (word == "*")
+                String result;
+                if (word[0] == '*')
                     result = std::to_string(num2 * num1);
-                else if (word == "/")
+                else if (word[0] == '/')
                 {
                     if (num2 == 0)
                     {
@@ -261,7 +268,7 @@ int main()
                     else
                         result = std::to_string(num1 / num2);
                 }
-                else if (word == "+")
+                else if (word[0] == '+')
                     result = std::to_string(num1 + num2);
                 else
                     result = std::to_string(num1 - num2);
