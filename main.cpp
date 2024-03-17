@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <vector>
+#include "vector.h"
 
 const int S_MAX = 10000;
 
@@ -16,7 +16,7 @@ int wage(const std::string& ch)
     return 0;
 }
 
-void operator_char(std::string Stack[S_MAX], int& index, std::string& character, std::string& output, std::vector<std::string>& helper) 
+void operator_char(std::string Stack[S_MAX], int& index, std::string& character, std::string& output, Vector<std::string>& helper) 
 {
     while (index > 0) {
         if (wage(character) == 3 || wage(character) > wage(Stack[index - 1]))
@@ -50,8 +50,8 @@ int main()
 
         std::string expression;
         std::getline(std::cin, expression);
-        std::vector<std::string> separated_expression;
-        std::vector<std::string> separated_expression_for_processing;
+        Vector<std::string> separated_expression;
+        Vector<std::string> separated_expression_for_processing;
         
         std::string temp;
         for (char c : expression) 
@@ -67,9 +67,9 @@ int main()
         if (temp != " ")
             separated_expression.push_back(temp);
 
-        
-        for (auto string : separated_expression) 
+        for (int i = 0; i < separated_expression.size(); i++)
         {
+            std::string string = separated_expression[i];
             if (string == ",") {
                 while (stack_index > 0 && (Stack[stack_index - 1] == "+" || Stack[stack_index - 1] == "-" 
                 || Stack[stack_index - 1] == "/" || Stack[stack_index - 1] == "*" || Stack[stack_index - 1] == "N")) 
@@ -151,10 +151,11 @@ int main()
         std::cout << output << std::endl;
 
         // Now when basic preprocessing is done we begin!
-        std::vector<std::string> queue;
+        Vector<std::string> queue;
         
-        for (auto word : separated_expression_for_processing)
+        for (int i = 0; i < separated_expression_for_processing.size(); i++)
         {
+            std::string word = separated_expression_for_processing[i];
             if (division_by_zero)
                 break;
             if (word[0] == 'M' && word[1] == 'A')
