@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <vector>
 
-const int S_MAX = 100;
+const int S_MAX = 10000;
 
 int wage(const std::string& ch) 
 {
@@ -124,8 +124,8 @@ int main()
                     full += Stack[stack_index - 1];
                     if (stack_index > 0 && Stack[stack_index - 1] != "IF")
                     {
-                        output += '0' + local_counter_stack[local_stack_index];
-                        full += '0' + local_counter_stack[local_stack_index];
+                        output += std::to_string(local_counter_stack[local_stack_index]);
+                        full += std::to_string(local_counter_stack[local_stack_index]);
                     }
                     if (full.size())
                         separated_expression_for_processing.push_back(full);
