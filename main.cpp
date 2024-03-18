@@ -5,6 +5,20 @@
 
 const int S_MAX = 10000;
 
+int min(int a, int b)
+{
+    if (a > b)
+        return b;
+    return a;
+}
+
+int max(int a, int b)
+{
+    if (a > b)
+        return a;
+    return b;
+}
+
 int wage(const String& ch) 
 {
     if (ch[0] == '+' || ch[0] == '-')
@@ -178,7 +192,7 @@ int main()
                 {
                     int number = queue.back().stoi();
                     queue.pop_back();
-                    maxValue = std::max(maxValue, number);
+                    maxValue = max(maxValue, number);
                     std::cout << number << " ";
                 }
                 for (int i = queue.size() - 1; i >= 0; i--)
@@ -201,7 +215,7 @@ int main()
                 {
                     int number = queue.back().stoi();
                     queue.pop_back();
-                    minValue = std::min(minValue, number);
+                    minValue = min(minValue, number);
                     std::cout << number << " ";
                 }
                 for (int i = queue.size() - 1; i >= 0; i--)
@@ -271,7 +285,9 @@ int main()
                 
                 String result;
                 if (word[0] == '*')
+                {
                     result += (num2 * num1);
+                }
                 else if (word[0] == '/')
                 {
                     if (num2 == 0)

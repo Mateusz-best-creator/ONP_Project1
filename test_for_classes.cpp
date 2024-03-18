@@ -35,4 +35,8 @@ int main()
     String test2;
     test2 += -400;
     cout << test2 << endl;
+
+    String test3;
+    test3 += 0;
+    cout << test3 << endl;
 }

@@ -129,6 +129,8 @@ String& String::operator+=(int number)
         number *= -1;
     }
     Vector<int> numbers;
+    if (number == 0)
+        numbers.push_back(0);
     while (number > 0)
     {
         int t = number % 10;
