@@ -2,109 +2,118 @@
 #define __STRING_H__
 
 #include <iostream>
+#include <ostream>
 #include <cstring>
 
 class String
 {
 private:
-    char* m_Data;
-    size_t m_Size;
+	char * buf = nullptr;
+	unsigned int size = 0;
 
 public:
-    // Constructor and destructor
-    String()
+	String() : buf(nullptr), size(0) // default constructor
+	{
+	}
+
+	String(const char * const buffer) // constructor
+	{
+		size = strlen(buffer);
+		buf = new char[size + 1]; // + 1 for the keeping the null character
+		strncpy(buf, buffer, size); // copy from the incoming buffer to character buffer of the new object
+	}
+
+	String(const String & obj) // copy constructor
+	{
+		size = obj.size;
+		buf = new char[size + 1]; // + 1 for the keeping the null character
+		strncpy(buf, obj.buf, size); // copy from the incoming buffer to character buffer of the new object
+	}
+
+	String& operator=(const String & obj) // copy assignment
+	{
+		clear(); // cleanup any existing data
+
+		// Copy data from the newly assigned String object
+		size = obj.size;
+		buf = new char[size + 1]; // + 1 for the keeping the null character
+		strncpy(buf, obj.buf, size); // copy from the incoming buffer to character buffer of the new object
+		return *this;
+	}
+
+	String(String && dyingObj) // move constructor
+	// && is a reference operator defined in the C++11 standard 
+	// which means "dyingObj" is an r-value reference.
+	// Compiler calls this constructor when the object passed in the argument
+	// is about to die due to scope end or such
+	{
+		clear(); // cleanup any existing data
+
+		// Copy data from the incoming object
+		size = dyingObj.size;
+		
+		// Transfer ownership of underlying char buffer from incoming object to this object
+		buf = dyingObj.buf;
+		dyingObj.buf = nullptr;		
+	}
+
+	String& operator=(String && dyingObj) // move assignment
+	{
+		clear(); // cleanup any existing data
+
+		// Copy data from the incoming object
+		size = dyingObj.size;
+
+		// Transfer ownership of underlying char buffer from incoming object to this object
+		buf = dyingObj.buf;
+		dyingObj.buf = nullptr;
+
+		return *this;
+	}
+
+	String operator+(const String & obj) // concatenation
+	{
+		String s; // create a new string named 's'
+		s.size = this->size + obj.size;
+		s.buf = new char[s.size + 1]; // allocate memory to keep the concatenated string
+		strncpy(s.buf, this->buf, this->size); // copy the 1st string
+		strncpy(s.buf + this->size, obj.buf, obj.size);
+
+		return s;
+	}
+
+	unsigned int length()
+	{
+		return size;
+	}
+
+	const char * c_str() const
+	{
+		return buf;
+	}
+
+	~String() // destructor
+	{
+		clear();
+	}
+
+    friend std::ostream& operator<<(std::ostream& cout, const String & obj)
     {
-        m_Size = 0;
-        m_Data = new char[1];
-        m_Data[0] = '\0';
+        cout << obj.c_str();
+        return cout;
     }
 
-    String(const char* string)
-    {
-        m_Size = strlen(string);
-        m_Data = new char[m_Size + 1];
-        memcpy(m_Data, string, m_Size);
-        m_Data[m_Size] = '\0';
-    }
-
-    ~String()
-    {
-        delete[] m_Data;
-    }
-
-    // Overloaded operators
-    String& operator+=(const String& other)
-    {
-        size_t total_size = m_Size + other.m_Size;
-        char* new_data = new char[total_size + 1];
-
-        strcpy(new_data, m_Data);
-        strcat(new_data, other.m_Data);
-
-        // Free memory of the current data
-        delete[] m_Data;
-
-        // Update data and size
-        m_Data = new_data;
-        m_Size = total_size;
-
-        return *this;
-    }
-
-    String& operator+=(const char ch)
-    {
-        size_t total_size = m_Size + 1;
-        char* new_data = new char[total_size + 1];
-        strcpy(new_data, this->m_Data);
-        new_data[total_size - 1] = ch;
-        new_data[total_size] = '\0';
-
-        // Free memory of the current data
-        delete[] m_Data;
-
-        // Update data and size
-        m_Data = new_data;
-        m_Size = total_size;
-
-        return *this;
-    }
-
-    char& operator[](int index) { return m_Data[index]; }
-    const char& operator[](int index) const { return m_Data[index]; }
-
-    // Getters and setters
-    size_t& size() { return m_Size; }
-    const size_t& size() const { return m_Size; }
-    char* get_data() { return m_Data; }
-    const char* get_data() const { return m_Data; }
-
-    // Friend functions
-    friend std::ostream& operator<<(std::ostream& os, const String& str)
-    {
-        for (int i = 0; i < str.m_Size; i++)
-        {
-            os << str.m_Data[i];
-        }
-        return os;
-    }
-
-    friend std::istream& operator>>(std::istream& is, String& str)
-    {
-        return is;
-    }
-
-    void clear()
-    {
-        delete[] m_Data;
-        m_Size = 0;
-    }
-
-    // TODO
-    void to_string(int number)
-    {
-
-    }
+private:
+	void clear()
+	{
+		if (buf != nullptr)
+		{
+			delete[] buf;
+		}
+		size = 0;
+	}
 };
+
 
 
 #endif

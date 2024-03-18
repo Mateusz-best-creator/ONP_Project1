@@ -8,7 +8,7 @@ using std::endl;
 
 int main()
 {
-    /*
+    
     Vector<String> vector;
     vector.push_back("Mateusz ");
     vector.push_back("C++ ");
@@ -17,13 +17,10 @@ int main()
     vector.pop_back();
     cout << vector << endl;
     cout << vector.back() << endl;
-    */
+    
     String name2;
     String name1("Jacek Cebula");
     String name("Mateusz Lalala");
     cout << name1 << endl;
     cout << name2 << endl;
-    name1 += ' ';
-    name1 += name;
-    cout << name1 << endl;
 }
