@@ -1,12 +1,11 @@
 #include <iostream>
-#include <string>
-#include <algorithm>
 #include "vector.h"
+#include "string.h"
 #include <cctype>
 
 const int S_MAX = 10000;
 
-int wage(const std::string& ch) 
+int wage(const String& ch) 
 {
     if (ch[0] == '+' || ch[0] == '-')
         return 1;
@@ -17,7 +16,7 @@ int wage(const std::string& ch)
     return 0;
 }
 
-void operator_char(std::string Stack[S_MAX], int& index, std::string& character, std::string& output, Vector<std::string>& helper) 
+void operator_char(String Stack[S_MAX], int& index, String& character, String& output, Vector<String>& helper) 
 {
     while (index > 0) {
         if (wage(character) == 3 || wage(character) > wage(Stack[index - 1]))
@@ -35,7 +34,7 @@ int main()
 {
     int times;
     std::cin >> times;
-    std::string Stack[S_MAX];
+    String Stack[S_MAX];
     while (std::cin.get() != '\n')
         continue;
 
@@ -43,18 +42,19 @@ int main()
     {
 
         int stack_index = 0;
-        std::string output;
+        String output;
         int local_counter_stack[S_MAX];
         int local_stack_index = 0;
         bool first_bool = true;
         bool division_by_zero = false;
 
-        std::string expression;
-        std::getline(std::cin, expression);
-        Vector<std::string> separated_expression;
-        Vector<std::string> separated_expression_for_processing;
+        String expression;
+        std::cin >> expression;
+        //std::getline(std::cin, expression);
+        Vector<String> separated_expression;
+        Vector<String> separated_expression_for_processing;
         
-        std::string temp;
+        String temp;
         for (int i = 0; i < expression.size(); i++)
         {
             char c = expression[i];
@@ -62,16 +62,17 @@ int main()
                 temp += c;
             else 
             {
-                separated_expression.push_back(temp);
+                if (temp.size())
+                    separated_expression.push_back(temp);
                 temp.clear();
             }
         }
         if (temp[0] != ' ')
             separated_expression.push_back(temp);
-
+        
         for (int k = 0; k < separated_expression.size(); k++)
         {
-            std::string string = separated_expression[k];
+            String string = separated_expression[k];
             if (string[0] == ',') {
                 while (stack_index > 0 && (Stack[stack_index - 1][0] == '+' || Stack[stack_index - 1][0] == '-' 
                 || Stack[stack_index - 1][0] == '/' || Stack[stack_index - 1][0] == '*' || Stack[stack_index - 1][0] == 'N')) 
@@ -124,13 +125,13 @@ int main()
                 || (Stack[stack_index - 1][0] == 'M' && Stack[stack_index - 1][1]== 'I') 
                 || (Stack[stack_index - 1][0] == 'M' && Stack[stack_index - 1][1] == 'A'))) 
                 {
-                    std::string full;
+                    String full;
                     output += Stack[stack_index - 1];
                     full += Stack[stack_index - 1];
                     if (stack_index > 0 && Stack[stack_index - 1][0] != 'I' && Stack[stack_index - 1][1] != 'F')
                     {
-                        output += std::to_string(local_counter_stack[local_stack_index]);
-                        full += std::to_string(local_counter_stack[local_stack_index]);
+                        output += local_counter_stack[local_stack_index];
+                        full += local_counter_stack[local_stack_index];
                     }
                     if (full.size())
                         separated_expression_for_processing.push_back(full);
@@ -158,15 +159,16 @@ int main()
         }
 
         std::cout << output << std::endl;
-
-        // Now when basic preprocessing is done we begin!
-        Vector<std::string> queue;
         
+        // Now when basic preprocessing is done we begin!
+        Vector<String> queue;
+        /*
         for (int k = 0; k < separated_expression_for_processing.size(); k++)
         {
-            std::string word = separated_expression_for_processing[k];
+            String word = separated_expression_for_processing[k];
             if (division_by_zero)
                 break;
+            
             if (word[0] == 'M' && word[1] == 'A')
             {
                 int amount = (word[word.size() - 1]) - '0';
@@ -174,7 +176,7 @@ int main()
                 int maxValue = INT16_MIN;
                 for (int i = 0; i < amount; i++)
                 {
-                    int number = std::stoi(queue.back());
+                    int number = queue.back().stoi();
                     queue.pop_back();
                     maxValue = std::max(maxValue, number);
                     std::cout << number << " ";
@@ -184,7 +186,9 @@ int main()
                     std::cout << queue[i] << " ";
                 }
                 std::cout << std::endl;
-                queue.push_back(std::to_string(maxValue));
+                String maxValueString;
+                maxValueString += maxValue;
+                queue.push_back(maxValueString);
             }
             else if (word[0] == 'M' && word[1] == 'I')
             {
@@ -288,5 +292,6 @@ int main()
         }
         else
             std::cout << queue.back() << "\n\n";
+            */
     }
 }
