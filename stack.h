@@ -1,11 +1,11 @@
-#ifndef __VECTOR_H__
-#define __VECTOR_H__
+#ifndef __STACK_H__
+#define __STACK_H__
 
 #include <cassert>
 #include <iostream>
 
 template <typename T>
-class Vector
+class STACK
 {
 private:
     T* m_Data = nullptr;
@@ -14,7 +14,7 @@ private:
 
 public:
     // Constructors and destructors
-    Vector()
+    STACK()
     {
         ReAlloc(2);
     }
@@ -57,7 +57,7 @@ public:
     const T& back() const { return m_Data[m_Size - 1]; }
 
     // friend functions
-    friend std::ostream& operator<<(std::ostream& os, const Vector& other)
+    friend std::ostream& operator<<(std::ostream& os, const STACK& other)
     {
         for (size_t i = 0; i < other.m_Size; i++)
         {

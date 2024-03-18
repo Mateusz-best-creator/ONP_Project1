@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include "string.h"
-#include "vector.h"
+#include "stack.h"
 
 using std::strlen;
 using std::strcpy;
@@ -128,7 +128,7 @@ String& String::operator+=(int number)
         smaller_than_zero = true;
         number *= -1;
     }
-    Vector<int> numbers;
+    STACK<int> numbers;
     if (number == 0)
         numbers.push_back(0);
     while (number > 0)
@@ -137,7 +137,7 @@ String& String::operator+=(int number)
         number /= 10;
         numbers.push_back(t);
     }
-    Vector<char> characters;
+    STACK<char> characters;
     if (smaller_than_zero)
         characters.push_back('-');
     for (int i = numbers.size() - 1; i >= 0; i--)
