@@ -28,6 +28,11 @@ int main()
 
     name2 += 213;
     cout << name2 << endl;
-    String test = "123321";
+    String test = "-10";
     cout << "Czesc oto liczba + 4 = " << test.stoi() + 4 << endl; 
+    test += -20;
+    cout << test << endl;
+    String test2;
+    test2 += -400;
+    cout << test2 << endl;
 }

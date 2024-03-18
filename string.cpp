@@ -119,8 +119,15 @@ String& String::operator+=(const String& s)
     return *this;
 }
 
+// Probems with negative numbers
 String& String::operator+=(int number)
 {
+    bool smaller_than_zero = false;
+    if (number < 0)
+    {
+        smaller_than_zero = true;
+        number *= -1;
+    }
     Vector<int> numbers;
     while (number > 0)
     {
@@ -129,6 +136,8 @@ String& String::operator+=(int number)
         numbers.push_back(t);
     }
     Vector<char> characters;
+    if (smaller_than_zero)
+        characters.push_back('-');
     for (int i = numbers.size() - 1; i >= 0; i--)
     {
         char temp;
@@ -180,9 +189,17 @@ int String::stoi()
         case '7': digit = 7; break;
         case '8': digit = 8; break;
         case '9': digit = 9; break;
+        default: digit = -1;
         }
-        number += digit * power;
-        power *= 10;
+        if (digit == -1)
+        {
+            number *= -1;
+        }
+        else
+        {
+            number += digit * power;
+            power *= 10;
+        }
     }
     return number;
 }

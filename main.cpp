@@ -50,7 +50,6 @@ int main()
 
         String expression;
         std::cin >> expression;
-        //std::getline(std::cin, expression);
         Vector<String> separated_expression;
         Vector<String> separated_expression_for_processing;
         
