@@ -162,7 +162,7 @@ int main()
         
         // Now when basic preprocessing is done we begin!
         Vector<String> queue;
-        /*
+        
         for (int k = 0; k < separated_expression_for_processing.size(); k++)
         {
             String word = separated_expression_for_processing[k];
@@ -174,6 +174,7 @@ int main()
                 int amount = (word[word.size() - 1]) - '0';
                 std::cout << word << " ";
                 int maxValue = INT16_MIN;
+                
                 for (int i = 0; i < amount; i++)
                 {
                     int number = queue.back().stoi();
@@ -185,11 +186,13 @@ int main()
                 {
                     std::cout << queue[i] << " ";
                 }
+                
                 std::cout << std::endl;
                 String maxValueString;
                 maxValueString += maxValue;
                 queue.push_back(maxValueString);
             }
+            
             else if (word[0] == 'M' && word[1] == 'I')
             {
                 int amount = (word[word.size() - 1]) - '0';
@@ -197,7 +200,7 @@ int main()
                 int minValue = INT16_MAX;
                 for (int i = 0; i < amount; i++)
                 {
-                    int number = std::stoi(queue.back());
+                    int number = queue.back().stoi();
                     queue.pop_back();
                     minValue = std::min(minValue, number);
                     std::cout << number << " ";
@@ -207,11 +210,14 @@ int main()
                     std::cout << queue[i] << " ";
                 }
                 std::cout << std::endl;
-                queue.push_back(std::to_string(minValue));
+                String minValueString;
+                minValueString += minValue;
+                queue.push_back(minValueString);
             }
+            
             else if (word[0] == 'N')
             {
-                int num1 = std::stoi(queue.back());
+                int num1 = queue.back().stoi();
                 queue.pop_back();
                 std::cout << word << " " << num1 << " ";
                 for (int i = queue.size() - 1; i >= 0; i--)
@@ -220,23 +226,25 @@ int main()
                 }
                 std::cout << std::endl;
                 num1 *= -1;
-                std::string result = std::to_string(num1);
+                String result;
+                result += num1;
                 queue.push_back(result);
             }
+            
             else if (word[0] == 'I' && word[1] == 'F')
             {
                 std::cout << word << " ";
-                int third = std::stoi(queue.back());
+                int third = queue.back().stoi();
                 queue.pop_back();
-                int second = std::stoi(queue.back());
+                int second = queue.back().stoi();
                 queue.pop_back();
-                int first = std::stoi(queue.back());
+                int first = queue.back().stoi();
                 queue.pop_back();
-                std::string result;
+                String result;
                 if (first > 0)
-                    result = std::to_string(second);
+                    result += second;
                 else
-                    result = std::to_string(third);
+                    result += third;
                 std::cout << third << " " << second << " " << first << " ";
                 for (int i = queue.size() - 1; i >= 0; i--)
                 {
@@ -245,11 +253,12 @@ int main()
                 std::cout << std::endl;
                 queue.push_back(result);
             }
+            
             else if (word[0] == '*' || word[0] == '/' || word[0] == '+' || word[0] == '-')
             {
-                std::string second = queue.back();
+                String second = queue.back();
                 queue.pop_back();
-                std::string first = queue.back();
+                String first = queue.back();
                 queue.pop_back();
                 std::cout << word << " " << second << " " << first << " ";
 
@@ -258,12 +267,12 @@ int main()
                     std::cout << queue[i] << " ";
                 }
                 std::cout << std::endl;
-                int num1 = std::stoi(first);
-                int num2 = std::stoi(second);
+                int num1 = first.stoi();
+                int num2 = second.stoi();
                 
-                std::string result;
+                String result;
                 if (word[0] == '*')
-                    result = std::to_string(num2 * num1);
+                    result += (num2 * num1);
                 else if (word[0] == '/')
                 {
                     if (num2 == 0)
@@ -272,18 +281,19 @@ int main()
                         division_by_zero = true;
                     }
                     else
-                        result = std::to_string(num1 / num2);
+                        result += (num1 / num2);
                 }
                 else if (word[0] == '+')
-                    result = std::to_string(num1 + num2);
+                    result += (num1 + num2);
                 else
-                    result = std::to_string(num1 - num2);
+                    result += (num1 - num2);
                 queue.push_back(result);
             }
             else
             {
                 queue.push_back(word);
             }
+            
         }
         if (division_by_zero)
         {
@@ -291,7 +301,10 @@ int main()
             division_by_zero = false;
         }
         else
-            std::cout << queue.back() << "\n\n";
-            */
+        {
+            if (queue.size())
+                std::cout << queue.back() << "\n\n";
+        }
+            
     }
 }
