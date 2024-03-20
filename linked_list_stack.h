@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <cassert>
 
 // Double linked linked_list
 template <typename T>
@@ -20,7 +21,7 @@ private:
     };
     Node* head = nullptr;
     Node* tail = nullptr;
-    size_t size = 0;
+    size_t m_Size = 0;
 
 public:
     // Constructor and destructor
@@ -42,7 +43,7 @@ public:
             tail->next = newNode;
             tail = newNode;
         }
-        size++;
+        m_Size++;
     }
 
     T pop_back()
@@ -58,11 +59,17 @@ public:
         if (tail != nullptr)
             tail->next = nullptr;
         delete temp;
-        size--;
+        m_Size--;
         return poppedValue;
     }
 
     // Getters and setters
+    size_t& size() { return m_Size; }
+    const size_t& size() const { return m_Size; }
+    bool isEmpty() { return m_Size == 0; }
+    size_t& getSize() { return m_Size; }
+    const size_t& getSize() const { return m_Size; }
+
     T back()
     {
         if (isEmpty()) 
@@ -73,8 +80,7 @@ public:
         return tail->value;
     }
 
-    bool isEmpty() const { return size == 0; }
-    size_t getSize() const { return size; }
+    
 
     // For deallocating memory
     void clear()
@@ -86,6 +92,7 @@ public:
     // Overloaded operators
     T& operator[](int index)
     {
+        assert((index < m_Size) && "Index out of range");
         // Time = O(n)
         Node* temp = head;
         int counter = 0;
@@ -99,6 +106,7 @@ public:
 
     const T& operator[](int index) const
     {
+        assert((index < m_Size) && "Index out of range");
         // Time = O(n)
         Node* temp = head;
         int counter = 0;

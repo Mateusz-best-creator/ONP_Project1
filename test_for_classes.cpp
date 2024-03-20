@@ -42,5 +42,6 @@ int main()
     cout << s[3] << endl;
     s.pop_back();
     cout << s << endl;
-    cout << s[2];
+    cout << s[2] << endl;
+    cout << s.size() << endl;
 }
