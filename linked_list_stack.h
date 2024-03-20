@@ -14,8 +14,7 @@ private:
     struct Node
     {
         T value;
-        Node* next;
-        Node* previous;
+        Node* next,* previous;
         Node(T val, Node* prev = nullptr, Node* nxt = nullptr)
             : value(val), previous(prev), next(nxt) {}
     };
@@ -64,7 +63,7 @@ public:
     // Getters and setters
     size_t& size() { return m_Size; }
     const size_t& size() const { return m_Size; }
-    bool isEmpty() { return m_Size == 0; }
+    bool isEmpty() const { return m_Size == 0; }
 
     T back() const 
     {
@@ -84,13 +83,13 @@ public:
     }
 
     // Overloaded operators
-    T& operator[](int index)
+    T& operator[](size_t index)
     {
         assert((index < m_Size) && "Index out of range");
         // Time = O(n)
         Node* temp = head;
-        int counter = 0;
-        while (temp != nullptr && counter < index)
+        size_t counter = 0;
+        while (counter < index)
         {
             counter++;
             temp = temp->next;
@@ -98,13 +97,13 @@ public:
         return temp->value;
     }
 
-    const T& operator[](int index) const
+    const T& operator[](size_t index) const
     {
         assert((index < m_Size) && "Index out of range");
         // Time = O(n)
         Node* temp = head;
-        int counter = 0;
-        while (temp != nullptr && counter < index)
+        size_t counter = 0;
+        while (counter < index)
         {
             counter++;
             temp = temp->next;

@@ -84,7 +84,7 @@ int main()
         if (temp[0] != ' ')
             separated_expression.push_back(temp);
         
-        for (int k = 0; k < separated_expression.size(); k++)
+        for (size_t k = 0; k < separated_expression.size(); k++)
         {
             String string = separated_expression[k];
             if (string[0] == ',') {
@@ -177,7 +177,7 @@ int main()
         // Now when basic preprocessing is done we begin!
         LinkedListStack<String> queue;
         
-        for (int k = 0; k < separated_expression_for_processing.size(); k++)
+        for (size_t k = 0; k < separated_expression_for_processing.size(); k++)
         {
             String word = separated_expression_for_processing[k];
             if (division_by_zero)

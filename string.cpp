@@ -161,7 +161,7 @@ String& String::operator+=(int number)
     size_t newSize = length + characters.size();
     char* temp = new char[newSize + 1];
     strcpy(temp, this->str);
-    for (int i = 0; i < characters.size(); i++)
+    for (size_t i = 0; i < characters.size(); i++)
         temp[length + i] = characters[i];
     temp[newSize] = '\0';
     
@@ -172,7 +172,7 @@ String& String::operator+=(int number)
     return *this;
 }
 
-int String::stoi()
+int String::stoi() const
 {
     int number = 0;
     int power = 1;

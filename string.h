@@ -12,13 +12,13 @@ private:
 public:
     // Define constructors and destructor
     String();
-    String(const char* s);
+    explicit String(const char* s);
     String(const String& s); // Copy constructor
     ~String();
 
     const int& size() const { return length; }
 	void clear();
-	int stoi();
+	int stoi() const;
 
     // Define overloaded operators
     bool operator==(const String& s) const;
