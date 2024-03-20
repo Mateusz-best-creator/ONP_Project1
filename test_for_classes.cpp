@@ -44,4 +44,10 @@ int main()
     cout << s << endl;
     cout << s[2] << endl;
     cout << s.size() << endl;
+    s.pop_back();
+    s.pop_back();
+    s.pop_back();
+    cout << s.size() << endl;
+    s.push_back(10);
+    cout << s << endl;
 }

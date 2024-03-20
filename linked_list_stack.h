@@ -35,7 +35,8 @@ public:
     void push_back(T val)
     {
         Node* newNode = new Node(val);
-        if (head == nullptr) {
+        if (head == nullptr) 
+        {
             head = newNode;
             tail = newNode;
         } else {
@@ -48,11 +49,6 @@ public:
 
     T pop_back()
     {
-        if (isEmpty()) 
-        {
-            std::cerr << "Stack underflow!" << std::endl;
-            exit(EXIT_FAILURE);
-        }
         T poppedValue = tail->value;
         Node* temp = tail;
         tail = tail->previous;
@@ -60,6 +56,8 @@ public:
             tail->next = nullptr;
         delete temp;
         m_Size--;
+        if (m_Size == 0)
+            head = tail = nullptr;
         return poppedValue;
     }
 
@@ -67,20 +65,16 @@ public:
     size_t& size() { return m_Size; }
     const size_t& size() const { return m_Size; }
     bool isEmpty() { return m_Size == 0; }
-    size_t& getSize() { return m_Size; }
-    const size_t& getSize() const { return m_Size; }
 
-    T back()
+    T back() const 
     {
-        if (isEmpty()) 
+        if (m_Size == 0)
         {
-            std::cerr << "Stack is empty!" << std::endl;
+            std::cerr << "Size of linked list is 0 in back() call!\n";
             exit(EXIT_FAILURE);
-        }
-        return tail->value;
+        } 
+        return tail->value; 
     }
-
-    
 
     // For deallocating memory
     void clear()

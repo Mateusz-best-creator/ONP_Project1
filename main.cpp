@@ -1,5 +1,6 @@
 #include <iostream>
 #include "stack.h"
+#include "linked_list_stack.h"
 #include "string.h"
 #include <cctype>
 
@@ -30,7 +31,7 @@ int wage(const String& ch)
     return 0;
 }
 
-void operator_char(String Stack[S_MAX], int& index, String& character, String& output, STACK<String>& helper) 
+void operator_char(String Stack[S_MAX], int& index, String& character, String& output, LinkedListStack<String>& helper) 
 {
     while (index > 0) {
         if (wage(character) == 3 || wage(character) > wage(Stack[index - 1]))
@@ -64,8 +65,8 @@ int main()
 
         String expression;
         std::cin >> expression;
-        STACK<String> separated_expression;
-        STACK<String> separated_expression_for_processing;
+        LinkedListStack<String> separated_expression;
+        LinkedListStack<String> separated_expression_for_processing;
         
         String temp;
         for (int i = 0; i < expression.size(); i++)
@@ -174,7 +175,7 @@ int main()
         std::cout << output << std::endl;
         
         // Now when basic preprocessing is done we begin!
-        STACK<String> queue;
+        LinkedListStack<String> queue;
         
         for (int k = 0; k < separated_expression_for_processing.size(); k++)
         {
