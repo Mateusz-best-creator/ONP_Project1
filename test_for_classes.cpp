@@ -1,5 +1,5 @@
 #include "string.h"
-#include "stack.h"
+#include "linked_list_stack.h"
 #include <iostream>
 
 using std::cout;
@@ -8,6 +8,7 @@ using std::endl;
 
 int main()
 {
+    /*
     String name1("Jacek Cebula");
     String name("Mateusz Lalala");
     String name2;
@@ -29,4 +30,17 @@ int main()
     String test3;
     test3 += 0;
     cout << test3 << endl;
+    */
+
+    LinkedListStack<int> s;
+    s.push_back(10);
+    s.push_back(20);
+    s.push_back(30);
+    s.push_back(40);
+    cout << s << endl;
+    cout << s[1] << endl;
+    cout << s[3] << endl;
+    s.pop_back();
+    cout << s << endl;
+    cout << s[2];
 }
