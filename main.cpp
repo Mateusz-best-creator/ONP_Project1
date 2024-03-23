@@ -20,7 +20,7 @@ int max(int a, int b)
     return b;
 }
 
-int wage(const String& ch) 
+int wage(const String &ch)
 {
     if (ch[0] == '+' || ch[0] == '-')
         return 1;
@@ -31,9 +31,10 @@ int wage(const String& ch)
     return 0;
 }
 
-void operator_char(String Stack[S_MAX], int& index, String& character, String& output, LinkedListStack<String>& helper) 
+void operator_char(String Stack[S_MAX], int &index, String &character, String &output, LinkedListStack<String> &helper)
 {
-    while (index > 0) {
+    while (index > 0)
+    {
         if (wage(character) == 3 || wage(character) > wage(Stack[index - 1]))
             break;
         output += Stack[--index];
@@ -45,7 +46,7 @@ void operator_char(String Stack[S_MAX], int& index, String& character, String& o
         Stack[index++] = character;
 }
 
-int main() 
+int main()
 {
     int times;
     std::cin >> times;
@@ -67,14 +68,14 @@ int main()
         std::cin >> expression;
         LinkedListStack<String> separated_expression;
         LinkedListStack<String> separated_expression_for_processing;
-        
+
         String temp;
         for (int i = 0; i < expression.size(); i++)
         {
             char c = expression[i];
             if (c != ' ')
                 temp += c;
-            else 
+            else
             {
                 if (temp.size())
                     separated_expression.push_back(temp);
@@ -83,13 +84,13 @@ int main()
         }
         if (temp[0] != ' ')
             separated_expression.push_back(temp);
-        
+
         for (size_t k = 0; k < separated_expression.size(); k++)
         {
             String string = separated_expression[k];
-            if (string[0] == ',') {
-                while (stack_index > 0 && (Stack[stack_index - 1][0] == '+' || Stack[stack_index - 1][0] == '-' 
-                || Stack[stack_index - 1][0] == '/' || Stack[stack_index - 1][0] == '*' || Stack[stack_index - 1][0] == 'N')) 
+            if (string[0] == ',')
+            {
+                while (stack_index > 0 && (Stack[stack_index - 1][0] == '+' || Stack[stack_index - 1][0] == '-' || Stack[stack_index - 1][0] == '/' || Stack[stack_index - 1][0] == '*' || Stack[stack_index - 1][0] == 'N'))
                 {
                     stack_index--;
                     output += Stack[stack_index];
@@ -101,9 +102,9 @@ int main()
                 continue;
             }
 
-            if (string[0] == '.') 
+            if (string[0] == '.')
             {
-                while (stack_index > 0) 
+                while (stack_index > 0)
                 {
                     output += Stack[--stack_index];
                     if (Stack[stack_index].size())
@@ -113,7 +114,7 @@ int main()
                 break;
             }
 
-            if (string[0] == '(') 
+            if (string[0] == '(')
             {
                 Stack[stack_index++] = string;
                 if (first_bool)
@@ -122,9 +123,9 @@ int main()
                     local_stack_index++;
                 local_counter_stack[local_stack_index] = 1;
             }
-            else if (string[0] == ')') 
+            else if (string[0] == ')')
             {
-                while (stack_index > 0 && Stack[stack_index - 1][0] != '(') 
+                while (stack_index > 0 && Stack[stack_index - 1][0] != '(')
                 {
                     output += Stack[--stack_index];
                     if (Stack[stack_index].size())
@@ -132,12 +133,11 @@ int main()
                     output += ' ';
                 }
 
-                if (stack_index > 0) 
+                if (stack_index > 0)
                     stack_index--; // Remove '(' from the stack
 
-                if (stack_index > 0 && ((Stack[stack_index - 1][0] == 'I' && Stack[stack_index - 1][1] == 'F') 
-                || (Stack[stack_index - 1][0] == 'M' && Stack[stack_index - 1][1]== 'I') 
-                || (Stack[stack_index - 1][0] == 'M' && Stack[stack_index - 1][1] == 'A'))) 
+                if (stack_index > 0 &&
+                    ((Stack[stack_index - 1][0] == 'I' && Stack[stack_index - 1][1] == 'F') || (Stack[stack_index - 1][0] == 'M' && Stack[stack_index - 1][1] == 'I') || (Stack[stack_index - 1][0] == 'M' && Stack[stack_index - 1][1] == 'A')))
                 {
                     String full;
                     output += Stack[stack_index - 1];
@@ -157,13 +157,9 @@ int main()
                     local_stack_index--;
             }
 
-            else if (string[0] == '+' || string[0] == '-' || string[0] == '/' || string[0] == '*' 
-            || (string[0] == 'M' && string[1] == 'I') 
-            || (string[0] == 'M' && string[1] == 'A') 
-            || (string[0] == 'I' && string[1] == 'F')
-            || string[0] == 'N') 
+            else if (string[0] == '+' || string[0] == '-' || string[0] == '/' || string[0] == '*' || (string[0] == 'M' && string[1] == 'I') || (string[0] == 'M' && string[1] == 'A') || (string[0] == 'I' && string[1] == 'F') || string[0] == 'N')
                 operator_char(Stack, stack_index, string, output, separated_expression_for_processing);
-            else 
+            else
             {
                 output += string;
                 if (string.size())
@@ -173,62 +169,49 @@ int main()
         }
 
         std::cout << output << std::endl;
-        
+
         // Now when basic preprocessing is done we begin!
         LinkedListStack<String> queue;
-        
+
         for (size_t k = 0; k < separated_expression_for_processing.size(); k++)
         {
             String word = separated_expression_for_processing[k];
             if (division_by_zero)
                 break;
-            
-            if (word[0] == 'M' && word[1] == 'A')
+
+            if (word[0] == 'M' && (word[1] == 'A' || word[1] == 'I'))
             {
                 int amount = (word[word.size() - 1]) - '0';
                 std::cout << word << " ";
-                int maxValue = INT16_MIN;
-                
+                int mValue;
+                int (*operation)(int a, int b);
+                if (word[1] == 'A')
+                {
+                    mValue = INT16_MIN;
+                    operation = max;
+                }
+                else
+                {
+                    mValue = INT16_MAX;
+                    operation = min;
+                }
+
                 for (int i = 0; i < amount; i++)
                 {
                     int number = queue.back().stoi();
                     queue.pop_back();
-                    maxValue = max(maxValue, number);
+                    mValue = operation(mValue, number);
                     std::cout << number << " ";
                 }
                 for (int i = queue.size() - 1; i >= 0; i--)
-                {
                     std::cout << queue[i] << " ";
-                }
-                
+
                 std::cout << std::endl;
-                String maxValueString;
-                maxValueString += maxValue;
-                queue.push_back(maxValueString);
+                String mValueString;
+                mValueString += mValue;
+                queue.push_back(mValueString);
             }
-            
-            else if (word[0] == 'M' && word[1] == 'I')
-            {
-                int amount = (word[word.size() - 1]) - '0';
-                std::cout << word << " ";
-                int minValue = INT16_MAX;
-                for (int i = 0; i < amount; i++)
-                {
-                    int number = queue.back().stoi();
-                    queue.pop_back();
-                    minValue = min(minValue, number);
-                    std::cout << number << " ";
-                }
-                for (int i = queue.size() - 1; i >= 0; i--)
-                {
-                    std::cout << queue[i] << " ";
-                }
-                std::cout << std::endl;
-                String minValueString;
-                minValueString += minValue;
-                queue.push_back(minValueString);
-            }
-            
+
             else if (word[0] == 'N')
             {
                 int num1 = queue.back().stoi();
@@ -244,7 +227,7 @@ int main()
                 result += num1;
                 queue.push_back(result);
             }
-            
+
             else if (word[0] == 'I' && word[1] == 'F')
             {
                 std::cout << word << " ";
@@ -267,7 +250,7 @@ int main()
                 std::cout << std::endl;
                 queue.push_back(result);
             }
-            
+
             else if (word[0] == '*' || word[0] == '/' || word[0] == '+' || word[0] == '-')
             {
                 String second = queue.back();
@@ -283,7 +266,7 @@ int main()
                 std::cout << std::endl;
                 int num1 = first.stoi();
                 int num2 = second.stoi();
-                
+
                 String result;
                 if (word[0] == '*')
                 {
@@ -309,7 +292,6 @@ int main()
             {
                 queue.push_back(word);
             }
-            
         }
         if (division_by_zero)
         {
@@ -321,6 +303,5 @@ int main()
             if (queue.size())
                 std::cout << queue.back() << "\n\n";
         }
-            
     }
 }
